@@ -35,8 +35,9 @@ public class TodoController implements Controller {
   private static final String API_TODOS = "/api/todos";
   private static final String API_TODO_BY_ID = "/api/todos/{id}";
   static final String OWNER_KEY = "owner";
-  static final String STATUS_KEY = "status";
-  static final String CATEGORY_KEY = "category";
+  public static final String STATUS_KEY = "status";
+  public static final String CATEGORY_KEY = "category";
+  public static final String LIMIT_KEY = "limit";
   static final String SORT_ORDER_KEY = "sortorder";
 
   private final JacksonMongoCollection<Todo> todoCollection;
@@ -90,6 +91,7 @@ public class TodoController implements Controller {
     ArrayList<Todo> matchingTodos = todoCollection
       .find(combinedFilter)
       .sort(sortingOrder)
+      .limit(limit(ctx))
       .into(new ArrayList<>());
 
     ctx.json(matchingTodos);
@@ -212,6 +214,18 @@ public class TodoController implements Controller {
    *
    * @param server The Javalin server instance
    */
+private int limit(Context ctx) {
+    if (ctx.queryParamMap().containsKey(LIMIT_KEY)) {
+      int targetLimit = ctx.queryParamAsClass(LIMIT_KEY, Integer.class)
+      .check(it -> it > 0, "Limit should be greater than 0. You gave" + ctx.queryParam(LIMIT_KEY))
+      .get();
+      return targetLimit;
+    } else {
+      return (int) todoCollection.countDocuments();
+    }
+  }
+
+
   @Override
   public void addRoutes(Javalin server) {
     server.get(API_TODO_BY_ID, this::getTodoById);
