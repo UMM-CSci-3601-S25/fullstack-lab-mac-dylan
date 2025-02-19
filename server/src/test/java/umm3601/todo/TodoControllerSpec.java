@@ -1,28 +1,22 @@
 package umm3601.todo;
 
-//import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertNotEquals;
-//import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-//import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -31,14 +25,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-//import org.mockito.ArgumentMatcher;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
@@ -51,13 +42,9 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-//import io.javalin.validation.BodyValidator;
 import io.javalin.validation.Validation;
-//import io.javalin.validation.ValidationError;
-//import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 import umm3601.Todos.Todo;
-//import umm3601.user.UserController;
 import umm3601.Todos.TodoController;
 
 /**
@@ -311,7 +298,7 @@ Validation validation = new Validation();
     String id = samsId.toHexString();
     when(ctx.pathParam("id")).thenReturn(id);
 
-    todoController.getTodos(ctx);
+    todoController.getTodoById(ctx);
 
     verify(ctx).json(todoCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
@@ -324,7 +311,7 @@ Validation validation = new Validation();
     when(ctx.pathParam("id")).thenReturn("bad");
 
     Throwable exception = assertThrows(BadRequestResponse.class, () -> {
-      todoController.getTodos(ctx);
+      todoController.getTodoById(ctx);
     });
 
     assertEquals("The requested todo id wasn't a legal Mongo Object ID.", exception.getMessage());
@@ -336,10 +323,10 @@ Validation validation = new Validation();
     when(ctx.pathParam("id")).thenReturn(id);
 
     Throwable exception = assertThrows(NotFoundResponse.class, () -> {
-      todoController.getTodos(ctx);
+      todoController.getTodoById(ctx);
     });
 
     assertEquals("The requested todo was not found", exception.getMessage());
   }
 
-  }
+}
