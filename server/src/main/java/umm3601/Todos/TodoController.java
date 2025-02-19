@@ -119,8 +119,16 @@ public class TodoController implements Controller {
       filters.add(regex(OWNER_KEY, pattern));
     }
     if (ctx.queryParamMap().containsKey(STATUS_KEY)) {
-      boolean status = Boolean.parseBoolean(ctx.queryParam(STATUS_KEY));
-      filters.add(eq(STATUS_KEY, status));
+      String statusParam = ctx.queryParam(STATUS_KEY);
+      boolean targetStatus;
+      if (statusParam.equalsIgnoreCase("complete")) {
+        targetStatus = true;
+      } else if (statusParam.equalsIgnoreCase("incomplete")) {
+        targetStatus = false;
+      } else {
+        throw new BadRequestResponse("Invalid status request");
+      }
+      filters.add(eq(STATUS_KEY, targetStatus));
     }
     if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(CATEGORY_KEY)), Pattern.CASE_INSENSITIVE);
