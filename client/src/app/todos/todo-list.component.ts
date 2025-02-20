@@ -44,7 +44,7 @@ export class TodoListComponent {
 
   todoBody = signal<string | undefined>(undefined);
   todoCategory = signal<string | undefined>(undefined);
-  todoStatus = signal<string | undefined>(undefined);
+  todoStatus = signal<boolean | undefined>(undefined);
 
   viewType = signal<'card' | 'list'>('card');
 
@@ -63,7 +63,7 @@ export class TodoListComponent {
         this.todoService.getTodos({
           category,
           owner,
-          status,
+          status: status?.toString(),
         })
       ),
       catchError((err) => {
@@ -87,7 +87,7 @@ export class TodoListComponent {
     return this.todoService.filterTodos(serverFilteredTodos, {
       category: this.todoCategory(),
       owner: this.todoOwner(),
-      status: this.todoStatus() === 'complete',
+      status: this.todoStatus() === true,
     });
   });
 
