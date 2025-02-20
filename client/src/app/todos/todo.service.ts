@@ -19,6 +19,7 @@ export class TodoService {
 
 
 
+
   // The private `HttpClient` is *injected* into the service
   // by the Angular framework. This allows the system to create
   // only one `HttpClient` and share that across all services
@@ -28,6 +29,7 @@ export class TodoService {
   // might not be currently running.
   constructor(private httpClient: HttpClient) {
   }
+
 
   /**
    * Get all the todos from the server, filtered by the information
@@ -47,14 +49,23 @@ export class TodoService {
    *  contacting a remote server over the Internet).
    */
   getTodos(filters?: { status?: boolean; owner?: string; category?: string; body?: string }): Observable<Todo[]> {
+
     // `HttpParams` is essentially just a map used to hold key-value
     // pairs that are then encoded as "?key1=value1&key2=value2&…" in
     // the URL when we make the call to `.get()` below.
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
+
+      if (filters.owner) {
+        httpParams = httpParams.set(this.ownerKey, filters.owner);
+      }
+     if (filters.body) {
+        httpParams = httpParams.set(this.bodyKey, filters.body);
+      }
       if (filters.category) {
         httpParams = httpParams.set('category', filters.category);
       }
+    
       if (filters.status) {
         httpParams = httpParams.set('status', filters.status.toString());
       // }
@@ -103,22 +114,32 @@ export class TodoService {
       filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
     }
 
-    // Filter by company
+
+     // Filter by category
+
     if (filters.category) {
       filters.category = filters.category.toLowerCase();
       filteredTodos = filteredTodos.filter(todo => todo.category.toLowerCase().indexOf(filters.category) !== -1);
     }
 
-    if (filters.status !== undefined){
-      filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
+    // Filter by body
+    if (filters.body) {
+      filters.body = filters.body.toLowerCase();
+      filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
     }
 
+    // Filter by status
+    if (filters.status !== undefined) {
+      filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
+    }
     return filteredTodos;
   }
 
+
+
   addTodo(newTodo: Partial<Todo>): Observable<string> {
-    // Send post request to add a new todo with the todo data as the body.
-    // `res.id` should be the MongoDB ID of the newly added `Todo`.
+
+
     return this.httpClient.post<{id: string}>(this.todoUrl, newTodo).pipe(map(response => response.id));
   }
 }

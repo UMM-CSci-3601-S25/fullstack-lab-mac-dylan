@@ -7,12 +7,13 @@
   }
 }
 
-// Capitalize the user role when displaying it in the user card.
-.todo-card-role {
+// Capitalize the todo status when displaying it in the todo card.
+.todo-card-status {
   text-transform: capitalize;
 }
 
-.todo-card-email {
+.todo-card-title {
+
   display: block; /* Make it a block-level element */
   color: inherit; /* Inherit the text color from the parent element */
   text-decoration: none; /* Remove default underline */

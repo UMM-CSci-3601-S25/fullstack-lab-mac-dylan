@@ -2,6 +2,9 @@
   <div class="flex-1">
     @if (todo) {
     <app-todo-card [todo]="todo()"></app-todo-card>
+
+    <p>Status: {{ todo().isComplete ? 'Complete' : 'Incomplete' }}</p>
+
     } @else if (error) {
     <mat-card class="error-card">
       <mat-card-content>

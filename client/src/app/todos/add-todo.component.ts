@@ -34,54 +34,48 @@ export class AddTodoComponent {
           return ({existingName: true});
         } else {
           return null;
-        }
-      },
+      }
+    },
     ])),
 
-    // Since this is for a company, we need workers to be old enough to work, and probably not older than 200.
-    status: new FormControl<boolean>(null, Validators.compose([
+    category: new FormControl('', Validators.compose([
       Validators.required,
-      // In the HTML, we set type="number" on this field. That guarantees that the value of this field is numeric,
-      // but not that it's a whole number. (The todo could still type -27.3232, for example.) So, we also need
-      // to include this pattern.
+      Validators.minLength(2),
+      Validators.maxLength(50),
     ])),
 
-    // We don't care much about what is in the company field, so we just add it here as part of the form
-    // without any particular validation.
-    body: new FormControl(''),
-
-    // We don't need a special validator just for our app here, but there is a default one for email.
-    // We will require the email, though.
-
-    category: new FormControl<TodoCategory>('groceries', Validators.compose([
+    body: new FormControl('', Validators.compose([
       Validators.required,
-      Validators.pattern('^(home work|video games|software design|groceries)$'),
+      Validators.minLength(2),
+    ])),
+
+    status: new FormControl('incomplete', Validators.compose([
+      Validators.required,
+      Validators.pattern('^(complete|incomplete)$'),
     ])),
   });
 
-
-  // We can only display one error at a time,
-  // the order the messages are defined in is the order they will display in.
   readonly addTodoValidationMessages = {
-    Owner: [
+    owner: [
       {type: 'required', message: 'Owner is required'},
       {type: 'minlength', message: 'Owner must be at least 2 characters long'},
       {type: 'maxlength', message: 'Owner cannot be more than 50 characters long'},
-      {type: 'existingOwner', message: 'Owner has already been taken'}
     ],
 
-    status: [
-      {type: 'required', message: 'Status is required'},
-      {type: 'pattern', message: 'Status must be true or false'}
+    category: [
+      {type: 'required', message: 'Category is required'},
+      {type: 'minlength', message: 'Category must be at least 2 characters long'},
+      {type: 'maxlength', message: 'Category cannot be more than 50 characters long'},
     ],
 
     body: [
-      {type: 'required', message: 'Body is required'}
+      {type: 'required', message: 'Body is required'},
+      {type: 'minlength', message: 'Body must be at least 2 characters long'},
     ],
 
-    Category: [
-      { type: 'required', message: 'Category is required' },
-      { type: 'pattern', message: 'Category must be Home Work, Video games, Software Design, or Groceries' },
+    status: [
+      { type: 'required', message: 'Status is required' },
+      { type: 'pattern', message: 'Status must be Complete or Incomplete' },
     ]
   };
 
@@ -106,7 +100,12 @@ export class AddTodoComponent {
   }
 
   submitForm() {
-    this.todoService.addTodo(this.addTodoForm.value).subscribe({
+    const newTodo = {
+      ...this.addTodoForm.value,
+      status: this.addTodoForm.value.status === 'complete'
+    };
+    this.todoService.addTodo(newTodo).subscribe({
+
       next: (newId) => {
         this.snackBar.open(
           `Added todo ${this.addTodoForm.value.owner}`,

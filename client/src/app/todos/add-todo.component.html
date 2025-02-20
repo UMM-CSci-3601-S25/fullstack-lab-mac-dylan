@@ -9,6 +9,7 @@
           <div class="flex-col">
             <mat-form-field>
               <mat-label>Owner</mat-label>
+
               <input matInput formControlName="owner"
                 required>
               @if (formControlHasError('owner')) {
@@ -122,11 +123,11 @@
               }
             </mat-form-field>
           </div>
-
         </mat-card-content>
         <mat-card-actions align="end">
           <button
             mat-button
+
             type="button"
             color="primary"
             [disabled]="!addTodoForm.valid"

@@ -1,4 +1,5 @@
 export interface Todo {
+
   _id: string;
   owner: string;
   status: boolean;
@@ -7,3 +8,4 @@ export interface Todo {
 }
 
 export type TodoCategory = 'home work' | 'video games' | 'software design' | 'groceries';
+
