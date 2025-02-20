@@ -41,10 +41,9 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 })
 export class TodoListComponent {
   todoOwner = signal<string | undefined>(undefined);
-
   todoBody = signal<string | undefined>(undefined);
   todoCategory = signal<string | undefined>(undefined);
-  todoStatus = signal<boolean | undefined>(undefined);
+  todoStatus = signal<string | undefined>(undefined);
 
   viewType = signal<'card' | 'list'>('card');
 
@@ -63,7 +62,7 @@ export class TodoListComponent {
         this.todoService.getTodos({
           category,
           owner,
-          status: status?.toString(),
+          status,
         })
       ),
       catchError((err) => {
@@ -87,7 +86,7 @@ export class TodoListComponent {
     return this.todoService.filterTodos(serverFilteredTodos, {
       category: this.todoCategory(),
       owner: this.todoOwner(),
-      status: this.todoStatus() === true,
+      status: this.todoStatus() === 'complete',
     });
   });
 
