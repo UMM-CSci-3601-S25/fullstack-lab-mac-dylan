@@ -57,12 +57,13 @@ export class TodoListComponent {
   private todoStatus$ = toObservable(this.todoStatus);
 
   serverFilteredTodos = toSignal(
-    combineLatest([this.todoCategory$, this.todoOwner$, this.todoStatus$]).pipe(
-      switchMap(([category, owner, status]) =>
+    combineLatest([this.todoCategory$, this.todoOwner$, this.todoStatus$, this.todoBody$]).pipe(
+      switchMap(([category, owner, status, body]) =>
         this.todoService.getTodos({
           category,
           owner,
           status,
+          body,
         })
       ),
       catchError((err) => {
