@@ -7,6 +7,8 @@ import { TodoCardComponent } from './todo-card.component';
 import { TodoService } from './todo.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
+// import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-todo-profile',
@@ -31,6 +33,14 @@ export class TodoProfileComponent {
         });
         return of();
       })
+      /*
+       * You can uncomment the line that starts with `finalize` below to use that console message
+       * as a way of verifying that this subscription is completing.
+       * We removed it since we were not doing anything interesting on completion
+       * and didn't want to clutter the console log
+       */
+      // finalize(() => console.log('We got a new todo, and we are done!'))
+
     )
   );
   // The `error` will initially have empty strings for all its components.

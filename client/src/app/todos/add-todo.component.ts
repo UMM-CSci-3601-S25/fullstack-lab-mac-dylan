@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { TodoCategory } from './todo';
 import { TodoService } from './todo.service';
 
 @Component({
@@ -19,9 +20,14 @@ import { TodoService } from './todo.service';
 export class AddTodoComponent {
 
   addTodoForm = new FormGroup({
+    // We allow alphanumeric input and limit the length for name.
     owner: new FormControl('', Validators.compose([
       Validators.required,
       Validators.minLength(2),
+      // In the real world you'd want to be very careful about having
+      // an upper limit like this because people can sometimes have
+      // very long names. This demonstrates that it's possible, though,
+      // to have maximum length limits.
       Validators.maxLength(50),
       (fc) => {
         if (fc.value.toLowerCase() === 'abc123' || fc.value.toLowerCase() === '123abc') {
@@ -99,6 +105,7 @@ export class AddTodoComponent {
       status: this.addTodoForm.value.status === 'complete'
     };
     this.todoService.addTodo(newTodo).subscribe({
+
       next: (newId) => {
         this.snackBar.open(
           `Added todo ${this.addTodoForm.value.owner}`,

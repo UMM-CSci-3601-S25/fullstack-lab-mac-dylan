@@ -1,12 +1,11 @@
 export interface Todo {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-isComplete: any;
+
   _id: string;
   owner: string;
-  body: string
-  status:boolean;
-  category: string;
-  avatar?: string;
+  status: boolean;
+  body: string;
+  category: TodoCategory;
 }
 
-export type TodoCategory = 'homework' | 'video games' | 'groceries' | 'software design';
+export type TodoCategory = 'home work' | 'video games' | 'software design' | 'groceries';
+

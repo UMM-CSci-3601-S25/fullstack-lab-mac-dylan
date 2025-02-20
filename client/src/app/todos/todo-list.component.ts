@@ -41,6 +41,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 })
 export class TodoListComponent {
   todoOwner = signal<string | undefined>(undefined);
+
   todoBody = signal<string | undefined>(undefined);
   todoCategory = signal<string | undefined>(undefined);
   todoStatus = signal<string | undefined>(undefined);

@@ -1,34 +1,40 @@
 @if (todo()) {
   <mat-card class="todo-card">
     <mat-card-header>
-      @if (todo().avatar) {
-        <img mat-card-avatar [src]="todo().avatar" alt="Avatar for {{todo().owner}}" class="todo-avatar">
-      }
-      <mat-card-title class="todo-card-title">{{ todo().owner }}</mat-card-title>
+
+      <mat-card-title class="todo-card-owner">{{ todo().owner }}</mat-card-title>
       <mat-card-subtitle class="todo-card-category">{{ todo().category }}</mat-card-subtitle>
     </mat-card-header>
     @if (!simple()) {
       <mat-card-content>
         <mat-list>
           <mat-list-item>
-            <mat-icon matListItemIcon>description</mat-icon>
-            <p matListItemTitle>Description</p>
-            <p matListItemLine class="todo-card-body">{{ todo().body }}</p>
+
+            <mat-icon matListItemIcon>dataset</mat-icon>
+            <p matListItemTitle>Role</p>
+            <!--
+            We had to put both the `role` and `age` entries on a single line. Otherwise
+            we got an annoying leading space in front of the values.
+            -->
+            <p matListItemLine class="todo-card-category">{{ todo().category }}</p>
           </mat-list-item>
-          <mat-divider [inset]=true></mat-divider>
           <mat-divider [inset]=true></mat-divider>
           <mat-list-item>
-            <mat-icon matListItemIcon>check_circle</mat-icon>
-            <p matListItemTitle>Status</p>
-            <p matListItemLine class="todo-card-status">{{ todo().status ? 'Complete' : 'Incomplete' }}</p>
+            <mat-icon matListItemIcon>schedule</mat-icon>
+            <p matListItemTitle>status</p>
+            <p matListItemLine class="todo-card-status">{{ todo().status }}</p>
           </mat-list-item>
+          <mat-divider [inset]=true></mat-divider>
+
         </mat-list>
       </mat-card-content>
     }
     @if (simple()) {
       <mat-card-actions>
+
         <button mat-button data-test="viewTodoButton" [routerLink]="['/todos', todo()._id]">View Todo</button>
       </mat-card-actions>
     }
   </mat-card>
+
 }
