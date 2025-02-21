@@ -128,7 +128,16 @@ class TodoControllerSpec {
     }
   }
 
-  List<Document> testTodos = new ArrayList<>();
+  private List<Document> testTodos = new ArrayList<>();
+
+  public List<Document> getTestTodos() {
+    return testTodos;
+  }
+
+  public void setTestTodos(List<Document> testTodos) {
+    this.testTodos = testTodos;
+  }
+
   private MongoCollection<Document> todoDocuments;
 
   @BeforeEach
