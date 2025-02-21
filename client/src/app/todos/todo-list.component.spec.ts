@@ -48,31 +48,14 @@ describe('Todo list', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [COMMON_IMPORTS, TodoListComponent, TodoCardComponent],
-      // providers:    [ TodoService ]  // NO! Don't provide the real service!
-      // Provide a test-double instead
       providers: [{ provide: TodoService, useValue: new MockTodoService() }],
     });
   });
 
-  // This constructs the `todoList` (declared
-  // above) that will be used throughout the tests.
   beforeEach(waitForAsync(() => {
-    // Compile all the components in the test bed
-    // so that everything's ready to go.
     TestBed.compileComponents().then(() => {
-      /* Create a fixture of the TodoListComponent. That
-       * allows us to get an instance of the component
-       * (todoList, below) that we can control in
-       * the tests.
-       */
       fixture = TestBed.createComponent(TodoListComponent);
       todoList = fixture.componentInstance;
-      /* Tells Angular to sync the data bindings between
-       * the model and the DOM. This ensures, e.g., that the
-       * `todoList` component actually requests the list
-       * of todos from the `MockTodoService` so that it's
-       * up to date before we start running tests on it.
-       */
       fixture.detectChanges();
     });
   }));
@@ -81,38 +64,32 @@ describe('Todo list', () => {
     expect(todoList.serverFilteredTodos().length).toBe(3);
   });
 
-  it("contains a todo named 'Chris'", () => {
+  it("contains a todo owned by 'Chris'", () => {
     expect(
-      todoList.serverFilteredTodos().some((todo: Todo) => todo.name === 'Chris')
+      todoList.serverFilteredTodos().some((todo: Todo) => todo.owner === 'Chris')
     ).toBe(true);
   });
 
-  it("contain a todo named 'Jamie'", () => {
+  it("contains a todo owned by 'Jamie'", () => {
     expect(
-      todoList.serverFilteredTodos().some((todo: Todo) => todo.name === 'Jamie')
+      todoList.serverFilteredTodos().some((todo: Todo) => todo.owner === 'Jamie')
     ).toBe(true);
   });
 
-  it("doesn't contain a todo named 'Santa'", () => {
+  it("doesn't contain a todo owned by 'Santa'", () => {
     expect(
-      todoList.serverFilteredTodos().some((todo: Todo) => todo.name === 'Santa')
+      todoList.serverFilteredTodos().some((todo: Todo) => todo.owner === 'Santa')
     ).toBe(false);
   });
 
-  it('has two todos that are 37 years old', () => {
+  it('has two todos that are complete', () => {
     expect(
-      todoList.serverFilteredTodos().filter((todo: Todo) => todo.age === 37)
+      todoList.serverFilteredTodos().filter((todo: Todo) => todo.status === true)
         .length
     ).toBe(2);
   });
 });
 
-/*
- * This test is a little odd, but illustrates how we can use stubs
- * to create mock objects (a service in this case) that be used for
- * testing. Here we set up the mock TodoService (todoServiceStub) so that
- * _always_ fails (throws an exception) when you request a set of todos.
- */
 describe('Misbehaving Todo List', () => {
   let todoList: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
@@ -123,7 +100,7 @@ describe('Misbehaving Todo List', () => {
   };
 
   beforeEach(() => {
-    // stub TodoService for test purposes
+// stub TodoService for test purposes
     todoServiceStub = {
       getTodos: () =>
         new Observable((observer) => {
@@ -134,13 +111,13 @@ describe('Misbehaving Todo List', () => {
 
     TestBed.configureTestingModule({
       imports: [COMMON_IMPORTS, TodoListComponent],
-      // providers:    [ TodoService ]  // NO! Don't provide the real service!
+// providers:    [ TodoService ]  // NO! Don't provide the real service!
       // Provide a test-double instead
       providers: [{ provide: TodoService, useValue: todoServiceStub }],
     });
   });
 
-  // Construct the `todoList` used for the testing in the `it` statement
+// Construct the `todoList` used for the testing in the `it` statement
   // below.
   beforeEach(waitForAsync(() => {
     TestBed.compileComponents().then(() => {
@@ -150,17 +127,40 @@ describe('Misbehaving Todo List', () => {
     });
   }));
 
-  it("generates an error if we don't set up a TodoListService", () => {
-    // If the service fails, we expect the `serverFilteredTodos` signal to
-    // be an empty array of todos.
+  it("generates an error if we don't set up a TodoService", () => {
     expect(todoList.serverFilteredTodos())
       .withContext("service can't give values to the list if it's not there")
       .toEqual([]);
-    // We also expect the `errMsg` signal to contain the "Problem contacting…"
+// We also expect the `errMsg` signal to contain the "Problem contacting…"
     // error message. (It's arguably a bit fragile to expect something specific
     // like this; maybe we just want to expect it to be non-empty?)
     expect(todoList.errMsg())
       .withContext('the error message will be')
       .toContain('Problem contacting the server – Error Code:');
+  });
+});
+
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+describe('TodoListComponent', () => {
+  let component: TodoListComponent;
+  let fixture: ComponentFixture<TodoListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MatSnackBarModule],
+      declarations: [TodoListComponent],
+      providers: [{ provide: TodoService, useClass: MockTodoService }]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TodoListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

@@ -100,3 +100,39 @@ describe('TodoProfileComponent', () => {
     expect(getTodoSpy).toHaveBeenCalledWith(chrisId);
   });
 });
+
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
+
+describe('TodoProfileComponent', () => {
+  let component: TodoProfileComponent;
+  let fixture: ComponentFixture<TodoProfileComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      declarations: [TodoProfileComponent],
+      providers: [
+        { provide: TodoService, useClass: MockTodoService },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({
+              get: () => 'chris_id'
+            })
+          }
+        }
+      ]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TodoProfileComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

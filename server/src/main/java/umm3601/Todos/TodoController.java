@@ -121,18 +121,22 @@ public class TodoController implements Controller {
     if (ctx.queryParamMap().containsKey(STATUS_KEY)) {
       String statusParam = ctx.queryParam(STATUS_KEY);
       boolean targetStatus;
-      if (statusParam.equalsIgnoreCase("complete")) {
+      if (statusParam.equalsIgnoreCase("complete") || statusParam.equalsIgnoreCase("true")) {
         targetStatus = true;
-      } else if (statusParam.equalsIgnoreCase("incomplete")) {
+      } else if (statusParam.equalsIgnoreCase("incomplete") || statusParam.equalsIgnoreCase("false")) {
         targetStatus = false;
       } else {
-        throw new BadRequestResponse("Invalid status request");
+        throw new BadRequestResponse("Todo status must be 'complete', 'incomplete', 'true', or 'false'");
       }
       filters.add(eq(STATUS_KEY, targetStatus));
     }
     if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
       Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(CATEGORY_KEY)), Pattern.CASE_INSENSITIVE);
       filters.add(regex(CATEGORY_KEY, pattern));
+    }
+    if (ctx.queryParamMap().containsKey("body")) {
+      Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam("body")), Pattern.CASE_INSENSITIVE);
+      filters.add(regex("body", pattern));
     }
 
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);

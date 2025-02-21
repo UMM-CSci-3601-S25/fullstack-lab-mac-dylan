@@ -13,24 +13,29 @@
           <mat-form-field class="input-field">
             <mat-label>Owner</mat-label>
             <input matInput data-test="todoOwnerInput" placeholder="Filter by owner"
-              [(ngModel)]="todoOwner">
+              [(ngModel)]="todoOwner" (ngModelChange)="getTodosFromServer()">
             <mat-hint>Filtered on client</mat-hint>
           </mat-form-field>
 
           <mat-form-field class="input-field">
             <mat-label>Category</mat-label>
             <input matInput data-test="todoCategoryInput" placeholder="Filter by category"
-             [(ngModel)]="todoCategory">
-
+              [(ngModel)]="todoCategory" (ngModelChange)="filteredTodos()">
             <mat-hint>Filtered on client</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="input-field">
+            <mat-label>Body</mat-label>
+            <input matInput data-test="todoBodyInput" placeholder="Filter by body" [(ngModel)]="todoBody">
+            <mat-hint>Filtered on server</mat-hint>
           </mat-form-field>
 
           <mat-form-field class="input-field">
             <mat-label>Status</mat-label>
             <mat-select [(ngModel)]="todoStatus" (selectionChange)="getTodosFromServer()" data-test="todoStatusSelect">
-              <mat-option value="">--</mat-option>
-              <mat-option value="complete">Complete</mat-option>
-              <mat-option value="incomplete">Incomplete</mat-option>
+              <mat-option [value]="undefined">--</mat-option>
+              <mat-option [value]="true">Complete</mat-option>
+              <mat-option [value]="false">Incomplete</mat-option>
             </mat-select>
             <mat-hint>Filtered on server</mat-hint>
           </mat-form-field>

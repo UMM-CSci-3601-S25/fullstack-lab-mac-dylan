@@ -34,30 +34,23 @@ export class TodoService {
   }
 
 
-  getTodos(filters?: { owner?: string; status?: string; body?: string; category?: string }): Observable<Todo[]> {
-    // `HttpParams` is essentially just a map used to hold key-value
-    // pairs that are then encoded as "?key1=value1&key2=value2&…" in
-    // the URL when we make the call to `.get()` below.
-    let httpParams: HttpParams = new HttpParams();
+  getTodos(filters?: { owner?: string; status?: boolean; body?: string; category?: string }): Observable<Todo[]> {
+    let httpParams = new HttpParams();
     if (filters) {
       if (filters.owner) {
-        httpParams = httpParams.set(this.ownerKey, filters.owner);
-      }
-      if (filters.status) {
-        httpParams = httpParams.set(this.statusKey, filters.status);
+        httpParams = httpParams.set('owner', filters.owner);
       }
       if (filters.category) {
-        httpParams = httpParams.set(this.categoryKey, filters.category);
+        httpParams = httpParams.set('category', filters.category);
+      }
+      if (filters.status !== undefined) {
+        httpParams = httpParams.set('status', filters.status.toString());
       }
       if (filters.body) {
-        httpParams = httpParams.set(this.bodyKey, filters.body);
+        httpParams = httpParams.set('contains', filters.body);
       }
     }
-    // Send the HTTP GET request with the given URL and parameters.
-
-    return this.httpClient.get<Todo[]>(this.todoUrl, {
-      params: httpParams,
-    });
+    return this.httpClient.get<Todo[]>(this.todoUrl, { params: httpParams });
   }
 
 
@@ -74,25 +67,26 @@ export class TodoService {
     // Filter by owner
     if (filters.owner) {
       filters.owner = filters.owner.toLowerCase();
-      filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
+      filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().includes(filters.owner));
     }
 
      // Filter by category
     if (filters.category) {
       filters.category = filters.category.toLowerCase();
-      filteredTodos = filteredTodos.filter(todo => todo.category.toLowerCase().indexOf(filters.category) !== -1);
+      filteredTodos = filteredTodos.filter(todo => todo.category.toLowerCase().includes(filters.category));
     }
 
-    // Filter by body
-    if (filters.body) {
-      filters.body = filters.body.toLowerCase();
-      filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().indexOf(filters.body) !== -1);
-    }
 
     // Filter by status
     if (filters.status !== undefined) {
       filteredTodos = filteredTodos.filter(todo => todo.status === filters.status);
     }
+
+     // filter by body
+    if (filters.body) {
+       filters.body = filters.body.toLowerCase();
+       filteredTodos = filteredTodos.filter(todo => todo.body.toLowerCase().includes(filters.body));
+     }
     return filteredTodos;
   }
 

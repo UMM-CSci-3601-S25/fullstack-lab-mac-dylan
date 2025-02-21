@@ -43,7 +43,7 @@ export class TodoListComponent {
   todoOwner = signal<string | undefined>(undefined);
   todoBody = signal<string | undefined>(undefined);
   todoCategory = signal<string | undefined>(undefined);
-  todoStatus = signal<string | undefined>(undefined);
+  todoStatus = signal<boolean | undefined>(undefined);
 
   viewType = signal<'card' | 'list'>('card');
 
@@ -57,12 +57,13 @@ export class TodoListComponent {
   private todoStatus$ = toObservable(this.todoStatus);
 
   serverFilteredTodos = toSignal(
-    combineLatest([this.todoCategory$, this.todoOwner$, this.todoStatus$]).pipe(
-      switchMap(([category, owner, status]) =>
+    combineLatest([this.todoCategory$, this.todoOwner$, this.todoStatus$, this.todoBody$]).pipe(
+      switchMap(([category, owner, status, body]) =>
         this.todoService.getTodos({
           category,
           owner,
           status,
+          body,
         })
       ),
       catchError((err) => {
@@ -86,7 +87,8 @@ export class TodoListComponent {
     return this.todoService.filterTodos(serverFilteredTodos, {
       category: this.todoCategory(),
       owner: this.todoOwner(),
-      status: this.todoStatus() === 'complete',
+      status: this.todoStatus(),
+      body: this.todoBody(),
     });
   });
 
