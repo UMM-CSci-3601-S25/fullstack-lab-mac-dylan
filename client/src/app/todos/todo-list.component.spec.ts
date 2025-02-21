@@ -139,3 +139,28 @@ describe('Misbehaving Todo List', () => {
       .toContain('Problem contacting the server – Error Code:');
   });
 });
+
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+describe('TodoListComponent', () => {
+  let component: TodoListComponent;
+  let fixture: ComponentFixture<TodoListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MatSnackBarModule],
+      declarations: [TodoListComponent],
+      providers: [{ provide: TodoService, useClass: MockTodoService }]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TodoListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
