@@ -218,16 +218,17 @@ describe('AddTodoComponent#submitForm()', () => {
     component.addTodoForm.controls.body.setValue('This is a valid body text.');
   });
 
-  // it('should call addTodo() and handle success response', fakeAsync(() => {
-  //   fixture.ngZone.run(() => {
-  //     const addTodoSpy = spyOn(todoService, 'addTodo').and.returnValue(of('1'));
-  //     component.submitForm();
-  //     expect(addTodoSpy).toHaveBeenCalledWith(component.addTodoForm.value);
-  //     tick();
-  //     expect(location.path()).toBe('/todos/1');
-  //     flush();
-  //   });
-  // }));
+  it('should call addTodo() and handle success response', fakeAsync(() => {
+    fixture.ngZone.run(() => {
+      const addTodoSpy = spyOn(todoService, 'addTodo').and.returnValue(of('1'));
+      component.submitForm();
+      const formValue = { ...component.addTodoForm.value, status: component.addTodoForm.value.status === 'complete' };
+      expect(addTodoSpy).toHaveBeenCalledWith(formValue);
+      tick();
+      expect(location.path()).toBe('/todos/1');
+      flush();
+    });
+  }));
 
   // it('should call addTodo() and handle error response', () => {
   //   const path = location.path();

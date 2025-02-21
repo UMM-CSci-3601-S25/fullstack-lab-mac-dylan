@@ -13,15 +13,14 @@
           <mat-form-field class="input-field">
             <mat-label>Owner</mat-label>
             <input matInput data-test="todoOwnerInput" placeholder="Filter by owner"
-              [(ngModel)]="todoOwner">
+              [(ngModel)]="todoOwner" (ngModelChange)="getTodosFromServer()">
             <mat-hint>Filtered on client</mat-hint>
           </mat-form-field>
 
           <mat-form-field class="input-field">
             <mat-label>Category</mat-label>
             <input matInput data-test="todoCategoryInput" placeholder="Filter by category"
-             [(ngModel)]="todoCategory">
-
+              [(ngModel)]="todoCategory" (ngModelChange)="filteredTodos()">
             <mat-hint>Filtered on client</mat-hint>
           </mat-form-field>
 

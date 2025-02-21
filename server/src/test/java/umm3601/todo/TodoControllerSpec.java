@@ -264,7 +264,7 @@ class TodoControllerSpec {
     String id = samsId.toHexString();
     when(ctx.pathParam("id")).thenReturn(id);
 
-    todoController.getTodo(ctx); // Correct method call
+    todoController.getTodos(ctx); // Correct method call
 
     verify(ctx).json(todoCaptor.capture());
     verify(ctx).status(HttpStatus.OK);
@@ -280,7 +280,7 @@ class TodoControllerSpec {
     when(ctx.pathParam("id")).thenReturn("bad");
 
     Throwable exception = assertThrows(BadRequestResponse.class, () -> {
-      todoController.getTodo(ctx); // Correct method call
+      todoController.getTodos(ctx); // Correct method call
     });
 
     assertEquals("The requested Todo id wasn't a legal Mongo Object ID.", exception.getMessage());
@@ -295,7 +295,7 @@ class TodoControllerSpec {
     when(ctx.pathParam("id")).thenReturn(id);
 
     Throwable exception = assertThrows(NotFoundResponse.class, () -> {
-      todoController.getTodo(ctx); // Correct method call
+      todoController.getTodos(ctx); // Correct method call
     });
 
     assertEquals("The requested Todo was not found", exception.getMessage());
