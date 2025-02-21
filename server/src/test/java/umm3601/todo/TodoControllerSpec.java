@@ -129,7 +129,7 @@ class TodoControllerSpec {
   }
 
   List<Document> testTodos = new ArrayList<>();
-  MongoCollection<Document> todoDocuments;
+  private MongoCollection<Document> todoDocuments;
 
   @BeforeEach
   void setupEach() throws IOException {
@@ -170,6 +170,14 @@ class TodoControllerSpec {
     todoController = new TodoController(db);
     // Reset our mock context and argument captor (declared with Mockito
     // annotations @Mock and @Captor)
+  }
+
+  public MongoCollection<Document> getTodoDocuments() {
+    return todoDocuments;
+  }
+
+  public void setTodoDocuments(MongoCollection<Document> todoDocuments) {
+    this.todoDocuments = todoDocuments;
   }
 
   @Test
