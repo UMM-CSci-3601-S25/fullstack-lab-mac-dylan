@@ -12,6 +12,7 @@ import { of } from 'rxjs';
 
 @Component({
   selector: 'app-todo-profile',
+  standalone: true,
   templateUrl: './todo-profile.component.html',
   styleUrls: ['./todo-profile.component.scss'],
   imports: [TodoCardComponent, MatCardModule],

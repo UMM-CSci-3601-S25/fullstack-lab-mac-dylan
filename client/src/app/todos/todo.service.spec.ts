@@ -13,21 +13,24 @@ describe('TodoService', () => {
       owner: 'Blanche',
       status: false,
       body: 'In sunt ex non tempor cillum commodo amet incididunt anim qui commodo quis',
-      category: 'software design'
+      category: 'software design',
+      isComplete: undefined
     },
     {
       _id: '58af3a600343927e48e87210',
       owner: 'Fry',
       status: false,
       body: 'Ipsum esse est ullamco magna tempor anim laborum non officia deserunt veniam commodo',
-      category: 'video games'
+      category: 'video games',
+      isComplete: undefined
     },
     {
       _id: '58af3a600343927e48e87214',
       owner: 'barry',
       status: true,
       body: 'Nisi sit non non sunt veniam pariatur',
-      category: 'video games'
+      category: 'video games',
+      isComplete: undefined
     }
   ];
   let todoService: TodoService;

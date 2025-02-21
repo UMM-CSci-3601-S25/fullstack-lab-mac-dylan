@@ -34,7 +34,7 @@ export class TodoService {
   }
 
 
-  getTodos(filters?: { owner?: string; status?: string; body?: string; category?: string }): Observable<Todo[]> {
+  getTodos(filters?: { owner?: string; status?: boolean; body?: string; category?: string }): Observable<Todo[]> {
     // `HttpParams` is essentially just a map used to hold key-value
     // pairs that are then encoded as "?key1=value1&key2=value2&…" in
     // the URL when we make the call to `.get()` below.
@@ -43,8 +43,8 @@ export class TodoService {
       if (filters.owner) {
         httpParams = httpParams.set(this.ownerKey, filters.owner);
       }
-      if (filters.status) {
-        httpParams = httpParams.set(this.statusKey, filters.status);
+      if (filters.status !== undefined) {
+        httpParams = httpParams.set(this.statusKey, filters.status.toString());
       }
       if (filters.category) {
         httpParams = httpParams.set(this.categoryKey, filters.category);
